@@ -1,0 +1,550 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "maison",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "ManageLights",
+                    "slots": [
+                        {
+                            "name": "on_off",
+                            "type": "on_off"
+                        },
+                        {
+                            "name": "location",
+                            "type": "location"
+                        },
+                        {
+                            "name": "link",
+                            "type": "link"
+                        },
+                        {
+                            "name": "group",
+                            "type": "group"
+                        },
+                        {
+                            "name": "lights",
+                            "type": "lights"
+                        }
+                    ],
+                    "samples": [
+                        "{on_off} les {lights} du groupe {group}",
+                        "{on_off} le groupe {group}",
+                        "{on_off} la {lights}",
+                        " {on_off} la {lights} {link} {location}"
+                    ]
+                },
+                {
+                    "name": "GetHelp",
+                    "slots": [
+                        {
+                            "name": "help",
+                            "type": "help",
+                            "samples": [
+                                "{help}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "ce que je peux faire",
+                        "comment faire",
+                        "aide",
+                        "de l'aide"
+                    ]
+                },
+                {
+                    "name": "GetCO",
+                    "slots": [
+                        {
+                            "name": "link",
+                            "type": "link"
+                        },
+                        {
+                            "name": "location",
+                            "type": "location",
+                            "samples": [
+                                "{location}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "la quantité de dioxyde",
+                        "la quantité de dioxyde  {link} {location}"
+                    ]
+                },
+                {
+                    "name": "GetTemperature",
+                    "slots": [
+                        {
+                            "name": "location",
+                            "type": "location",
+                            "samples": [
+                                "{location}"
+                            ]
+                        },
+                        {
+                            "name": "jonction",
+                            "type": "link"
+                        }
+                    ],
+                    "samples": [
+                        "la température {jonction} {location}",
+                        "Donne moi la température {jonction} {location}",
+                        "la température",
+                        "température",
+                        "Donne moi la température"
+                    ]
+                },
+                {
+                    "name": "ManageShutter",
+                    "slots": [
+                        {
+                            "name": "link",
+                            "type": "link"
+                        },
+                        {
+                            "name": "location_shutter",
+                            "type": "location_shutter"
+                        },
+                        {
+                            "name": "command_shutter",
+                            "type": "command_shutter"
+                        }
+                    ],
+                    "samples": [
+                        "{command_shutter} les volets",
+                        "{command_shutter} le volet {link} {location_shutter}"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "on_off",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "eteindre"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "allumer"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "ext_int",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "intérieur"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "extérieur"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "link",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "de l'"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dans la"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "dans le"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "de la"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "du"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "location",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "extérieur"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "bureau"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "salle"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "entrée"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "couloir"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "salle de bain",
+                                "synonyms": [
+                                    "salle de bains"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuisine"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "salon"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "help",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "co2",
+                                "synonyms": [
+                                    "dioxyde",
+                                    "C O 2"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "volet",
+                                "synonyms": [
+                                    "les volets"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "température",
+                                "synonyms": [
+                                    "la température"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "lumière",
+                                "synonyms": [
+                                    "la lumière"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "group",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "3"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "2"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "1"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "lights",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "lumière",
+                                "synonyms": [
+                                    "éclairage",
+                                    "ampoule",
+                                    "luminaire",
+                                    "lampe"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "command_shutter",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "stop",
+                                "synonyms": [
+                                    "exit",
+                                    "quite",
+                                    "arrête",
+                                    "arrete"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "down",
+                                "synonyms": [
+                                    "descendre",
+                                    "ferme",
+                                    "descends",
+                                    "descend",
+                                    "close",
+                                    "fermer"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "up",
+                                "synonyms": [
+                                    "ouvres",
+                                    "ouvre",
+                                    "montes",
+                                    "ouvrir",
+                                    "up",
+                                    "monter",
+                                    "monte"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "location_shutter",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "salle de bain"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "cuisine"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "GetHelp",
+                    "delegationStrategy": "ALWAYS",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "help",
+                            "type": "help",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1171392944923.1504546748345"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "GetTemperature",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "location",
+                            "type": "location",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1298383379614.1151578579203"
+                            }
+                        },
+                        {
+                            "name": "jonction",
+                            "type": "link",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "ManageShutter",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "link",
+                            "type": "link",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "location_shutter",
+                            "type": "location_shutter",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "command_shutter",
+                            "type": "command_shutter",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        }
+                    ]
+                },
+                {
+                    "name": "GetCO",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "link",
+                            "type": "link",
+                            "confirmationRequired": false,
+                            "elicitationRequired": false,
+                            "prompts": {}
+                        },
+                        {
+                            "name": "location",
+                            "type": "location",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.874869192029.742867572137"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Confirm.Intent.1171392944923",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Pour obtenir de l'aide, dite lumière ou température"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1171392944923.1504546748345",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "vous pouvez obtenir de l'aide sur la lumière, la température, le C O deux , ou les volets. Veuillez dire le mot correspondant à l'aide souhaitée"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.627980234014.1467433886821",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "De quelle pièce souhaitez-vous avoir la température?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1298383379614.628611841058",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "De quel endroit souhaitez-vous obtenir la température?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1298383379614.727304714768",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "De quel endroit souhaitez-vous la température?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1298383379614.1151578579203",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "De quel endroit souhaitez-vous obtenir la température?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.1298383379614.1151578579203",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Etes-vous sure?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.874869192029.742867572137",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "De quel endroit souhaitez-vous obtenir la quantité de dioxyde?"
+                    }
+                ]
+            }
+        ]
+    }
+}
