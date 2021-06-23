@@ -24,13 +24,13 @@ def treatment(monitor, json_file):
             intent = json_file["request"]["intent"]
             intent_name = intent["name"]
         
-            dict_intentToFunc = {'GetHelp':treatment_help,'ManageLights':treatment_lights,'GetTemperature':treatment_thermo,'GetCO':treatment_CO2,'ManageShutter':treatment_shutter}
+            dict_intentToFunc = {'GetHelp':treatment_help,'ManageScenario':treatment_scenario,'ManageLights':treatment_lights,'GetTemperature':treatment_thermo,'GetCO':treatment_CO2,'ManageShutter':treatment_shutter,'Manageequipment':treatment_equipment}
             func = dict_intentToFunc[intent_name]
             if (func != None):
                 return json_builder(func(intent))
             else:
                 return json_builder(cfg['config']['alexa_intent_impossible'])
-    else:
+    else:        
         return json_builder(cfg['config']['alexa_auth_impossible'])
 
 
@@ -50,10 +50,10 @@ def treatment_lights(intent):
     on_off_value = get_slot_value(intent, "on_off")
                 
     if (on_off_value == "eteindre"):
-        action = "off"
+        action = "turn_off"
         
     elif(on_off_value == "allumer"):
-        action = "on"
+        action = "turn_on"
     
     lamps = []
     
@@ -62,19 +62,19 @@ def treatment_lights(intent):
         skill_location = str(get_slot_value(intent, "location"))
         xaal_location =  ast.literal_eval(cfg['config']['dict_location_skillToXaal'])[skill_location]
 
-        lamps = get_device('lamp.toggle', 'alexa_location', xaal_location)
+        lamps = get_device('lamp.basic', 'alexa_location', xaal_location)
         
         logger.info("User asking for action on the '" + xaal_location + "' lights.")
         
     
     elif ("resolutions" in intent["slots"]["group"]):
         xaal_group = ast.literal_eval(cfg['config']['dict_group_skillToXaal'])[str(get_slot_value(intent, "group"))]
-        lamps = get_device('lamp.toggle', 'alexa_group', str(xaal_group))
+        lamps = get_device('lamp.basic', 'alexa_group', str(xaal_group))
         
         logger.info("User asking for action on the  group" + xaal_group + " lights.")
 
     else:
-        lamps = get_device('lamp.toggle', None, None)
+        lamps = get_device('lamp.basic', None, None)
         logger.info("user asking for action on all lights")
 
     send_action(lamps, action)
@@ -150,24 +150,72 @@ def treatment_shutter(intent):
 
     return None
 
+def treatment_equipment(intent):
+    """ Lights treatments : which lights has to be turn on / off """
+    
+    on_off_value = get_slot_value(intent, "on_off")
+                
+    if (on_off_value == "eteindre"):
+        action = "turn_off"
+        
+    elif(on_off_value == "allumer"):
+        action = "turn_on"
+    
+    equipments = []
+    
+    if("resolutions" in intent["slots"]["location"]):
+        skill_location = str(get_slot_value(intent, "location"))
+        xaal_location =  ast.literal_eval(cfg['config']['dict_location_skillToXaal'])[skill_location]
+        equipments = get_device('powerrelay.basic', 'alexa_location', xaal_location)
+        
+        logger.info("User asking for action on the '" + xaal_location + "' radio.")
+    elif ("resolutions" in intent["slots"]["group"]):
+        xaal_group = ast.literal_eval(cfg['config']['dict_group_skillToXaal'])[str(get_slot_value(intent, "group"))]
+        equipments = get_device('powerrelay.basic', 'alexa_group', str(xaal_group))        
+        logger.info("User asking for action on the  group" + xaal_group + "radio")
+
+    else:
+        equimpents = get_device('powerrelay.basic', None, None)
+        logger.info("user asking for action on all radio")
+    send_action(equipments, action)
+    return None
+
+def treatment_scenario(intent):
+    result = None
+    
+    action_value = get_slot_value(intent, "scenario_action")
+          
+    if (action_value == "activer"):
+        action = "on"
+        
+    elif(action_value == "desactiver"):
+        action = "off"
+    
+    if("resolutions" in intent["slots"]["scenario"]):
+       
+        skill_scenario = str(get_slot_value(intent, "scenario"))
+        xaal_scenario =  ast.literal_eval(cfg['config']['dict_scenario_skillToXaal'])[skill_scenario]
+        print('xaal_scenario: ',xaal_scenario)
+        if("resolutions" in intent["slots"]["group"]):
+            xaal_group = ast.literal_eval(cfg['config']['dict_group_skillToXaal'])[str(get_slot_value(intent, "group"))]
+            scenario = get_device('scenario.basic', 'alexa_scenario', str(xaal_group))
+
+        else :
+            scenario = get_device('scenario.basic', 'alexa_scenario', xaal_scenario)
+        
+        logger.info("User asking for action on the '" + xaal_scenario + "' scenario")
+        send_action(scenario, action)
+    return result
+
 def get_device(devType, metadataKey, metadataValue):
     """ Return the device of a Type. It is also possible to filter these devices with meta data"""
-    
     result = []
-    print(metadataKey,metadataValue)
     if ((metadataKey != None) and (metadataValue != None)):
-        print("avant for")
         for device in mMonitor.devices.get_with_dev_type(devType):
-            print(mMonitor.devices.get_with_dev_type(devType))
-            print(device.db.get(metadataKey))
-            print(device)
-            print(mMonitor.devices.get_with_key('alexa_location'))
             if (device.db.get(metadataKey) == metadataValue):
                 result.append(device)
-        
         if (len(result) == 0):
-            print("---TEST----")
-            #raise Exception("Aucun équipement trouvé")
+            raise Exception("Aucun équipement trouvé")
     else:
         result = mMonitor.devices.get_with_dev_type(devType)
     return result
@@ -180,7 +228,6 @@ def send_action(devices, action):
     """ Send action to a list of devices """
 
     for dev in devices:
-        print("DEV ADDR = ",dev.address)
         body = {}
         if dev:
             mMonitor.engine.send_request(mMonitor.dev,[dev.address,],action,body)

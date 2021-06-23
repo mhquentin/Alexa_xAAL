@@ -27,7 +27,6 @@ logger = logging.getLogger(PACKAGE_NAME)
 monitor = None
 
 
-
 def monitor_filter(msg):
     """ Filter incomming messages. Return False if you don't want to use this device"""
     if msg.dev_type in BLACK_LIST:
@@ -46,14 +45,14 @@ def setup_xaal():
         cfg['config']['db_server'] = ''
         cfg.write()
     dev            = Device("hmi.basic")
-    dev.address    = tools.str_to_uuid(cfg['config']['addr'])
+    dev.address    = tools.get_uuid(cfg['config']['addr'])
     dev.vendor_id  = "IHSEV"
     dev.product_id = "REST API"
     dev.version    = 0.1
     dev.info       = "%s@%s" % (PACKAGE_NAME,platform.node())
 
     engine.add_device(dev)
-    db_server = tools.str_to_uuid(cfg['config'].get('db_server',None))
+    db_server = tools.get_uuid(cfg['config'].get('db_server',None))
     if not db_server:
         logger.info('Please set a db_server in your config file')
     monitor = Monitor(dev,filter_func=monitor_filter,db_server=db_server)
@@ -69,7 +68,7 @@ def xaal_loop(engine):
 
 @post('/json')
 def receive_json():
-    print(json.dumps(request.json, indent=4, sort_keys=True))
+    #print(json.dumps(request.json, indent=4, sort_keys=True))
     res = treatment(monitor, request.json)
     res = json.dumps(res, indent=4)    
     response.headers['Content-Type'] = 'application/json'
@@ -93,6 +92,7 @@ def main():
     except KeyboardInterrupt:
         print("Bye Bye...")
     
-
+    
+    
 if __name__ == '__main__':
     main()
