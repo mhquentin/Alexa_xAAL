@@ -79,7 +79,7 @@ def treatment_lights(intent):
 
     send_action(lamps, action)
 
-    return None
+    return cfg['config']['alexa_response']
 
 def treatment_thermo(intent):
     """ Return the thermometer temperature if both thermometer AND temperature were found. Otherwise, return it is impossible to answer """
@@ -137,13 +137,13 @@ def treatment_shutter(intent):
     action = get_slot_value(intent, "command_shutter")
     if("resolutions" in intent["slots"]["location_shutter"]):
         skill_location = str(get_slot_value(intent, "location_shutter"))
-        xaal_location =  ast.literal_eval(cfg['config']['dict_location_skillToXaal'])[skill_location] 
-        shutters = get_device("shutter.basic", 'alexa_location', xaal_location)
+        xaal_location =  ast.literal_eval(cfg['config']['dict_location_shutter_skillToXaal'])[skill_location] 
+        shutters = get_device("shutter.position", 'alexa_location', xaal_location)
 
         logger.info("User asking for"+action+" on the '" + xaal_location  + "' shutters")  
 
     else:
-        shutters = get_device("shutter.basic", None, None)
+        shutters = get_device("shutter.position", None, None)
         logger.info("User asking for "+action+" on all shutters")
 
     send_action(shutters, action)
@@ -162,23 +162,29 @@ def treatment_equipment(intent):
         action = "turn_on"
     
     equipments = []
+    equipments_location = []
+
+    if("resolutions" in intent["slots"]["equipment"]):
+        skill_equipment = str(get_slot_value(intent, "equipment"))
+        xaal_equipment =  ast.literal_eval(cfg['config']['dict_equipment_skillToXaal'])[skill_equipment]
+        print(xaal_equipment)
+        equipments = get_device('powerrelay.basic', 'alexa_equipment', xaal_equipment)
     
     if("resolutions" in intent["slots"]["location"]):
         skill_location = str(get_slot_value(intent, "location"))
         xaal_location =  ast.literal_eval(cfg['config']['dict_location_skillToXaal'])[skill_location]
-        equipments = get_device('powerrelay.basic', 'alexa_location', xaal_location)
-        
+        equipments_location = get_device('powerrelay.basic', 'alexa_location', xaal_location)
         logger.info("User asking for action on the '" + xaal_location + "' radio.")
-    elif ("resolutions" in intent["slots"]["group"]):
-        xaal_group = ast.literal_eval(cfg['config']['dict_group_skillToXaal'])[str(get_slot_value(intent, "group"))]
-        equipments = get_device('powerrelay.basic', 'alexa_group', str(xaal_group))        
-        logger.info("User asking for action on the  group" + xaal_group + "radio")
-
+        for device in equipments :
+            if device not in equipments_location :
+                while device in equipments :
+                    del equipments[equipments.index(device)]
+        
     else:
         equimpents = get_device('powerrelay.basic', None, None)
-        logger.info("user asking for action on all radio")
+        logger.info("user asking for action on all powerrelay")
     send_action(equipments, action)
-    return None
+    return cfg['config']['alexa_response']
 
 def treatment_scenario(intent):
     result = None
@@ -212,6 +218,9 @@ def get_device(devType, metadataKey, metadataValue):
     result = []
     if ((metadataKey != None) and (metadataValue != None)):
         for device in mMonitor.devices.get_with_dev_type(devType):
+            print(device)
+            print(device.db.get(metadataKey))
+            print(metadataKey)
             if (device.db.get(metadataKey) == metadataValue):
                 result.append(device)
         if (len(result) == 0):
