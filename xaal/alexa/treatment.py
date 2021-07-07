@@ -24,7 +24,7 @@ def treatment(monitor, json_file):
             intent = json_file["request"]["intent"]
             intent_name = intent["name"]
         
-            dict_intentToFunc = {'GetHelp':treatment_help,'ManageScenario':treatment_scenario,'ManageLights':treatment_lights,'GetTemperature':treatment_thermo,'GetCO':treatment_CO2,'ManageShutter':treatment_shutter,'Manageequipment':treatment_equipment}
+            dict_intentToFunc = {'Pepper':treatment_pepper,'GetHelp':treatment_help,'ManageScenario':treatment_scenario,'ManageLights':treatment_lights,'GetTemperature':treatment_thermo,'GetCO':treatment_CO2,'ManageShutter':treatment_shutter,'Manageequipment':treatment_equipment}
             func = dict_intentToFunc[intent_name]
             if (func != None):
                 return json_builder(func(intent))
@@ -212,6 +212,9 @@ def treatment_scenario(intent):
         logger.info("User asking for action on the '" + xaal_scenario + "' scenario")
         send_action(scenario, action)
     return result
+
+def treatment_pepper(intent):
+    return cfg['config']['alexa_pepper_response']
 
 def get_device(devType, metadataKey, metadataValue):
     """ Return the device of a Type. It is also possible to filter these devices with meta data"""

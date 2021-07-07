@@ -81,7 +81,7 @@ def run():
     setup_xaal()
     app = default_app()
     debug(True)
-    port = 8080
+    port = 8081
     logger.info("HTTP Server running on port : %d" % port)
     server = WSGIServer(("", port), app, handler_class=WebSocketHandler)
     server.serve_forever()
